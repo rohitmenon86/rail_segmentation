@@ -1,0 +1,11 @@
+<launch>
+	<node name="rail_segmentation" pkg="rail_segmentation" type="rail_segmentation" output="screen">
+    <!-- Rail segmentation parameters -->
+    <param name="debug" value="false" />
+    <param name="point_cloud_topic" value="/camera/depth_registered/points" />    
+    <param name="use_color" value="false" />
+    <param name="crop_first" value="false" />
+    <param name="label_markers" value="true" />
+	</node>
+  
+</launch>
