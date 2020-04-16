@@ -1,7 +1,28 @@
 - name: "Default Zone"
-  remove_surface: true
-  parent_frame_id: "base_link"
-  child_frame_id: "camera_depth_frame"
-  bounding_frame_id: "base_link"
-  segmentation_frame_id: "base_link"
-  z_min: 0.10
+  parent_frame_id: "world"
+  child_frame_id: "camera_depth_optical_frame"
+  bounding_frame_id: "world"
+  segmentation_frame_id: "world"
+  z_min:  0.15
+  z_max:  3.95
+  x_min:  -1.0
+  x_max:  1.0
+  y_min: -1.0
+  y_max:  1.0
+  remove_surface:  true
+  require_surface: true
+
+- name: "World Zone"
+  parent_frame_id: "camera_link"
+  child_frame_id: "camera_depth_optical_frame"
+  bounding_frame_id: "camera_link"
+  segmentation_frame_id: "camera_link"
+  z_min:  -1.0
+  z_max:  1.0
+  x_min:  -1.0
+  x_max:  1.0
+  y_min: -1.0
+  y_max:  1.0
+  remove_surface:  true
+  require_surface: false
+
