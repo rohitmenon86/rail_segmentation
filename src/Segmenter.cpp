@@ -34,7 +34,7 @@ Segmenter::Segmenter() : private_node_("~"), tf2_(tf_buffer_)
   // flag for using the provided point cloud
 
   // set defaults
-  string point_cloud_topic("/head_camera/depth_registered/points");
+  string point_cloud_topic("/camera/depth/points");
   string zones_file(ros::package::getPath("rail_segmentation") + "/config/zones.yaml");
 
   // grab any parameters we need
@@ -45,7 +45,7 @@ Segmenter::Segmenter() : private_node_("~"), tf2_(tf_buffer_)
   private_node_.param("use_color", use_color_, false);
   private_node_.param("crop_first", crop_first_, false);
   private_node_.param("label_markers", label_markers_, false);
-  private_node_.param<string>("point_cloud_topic", point_cloud_topic_, "/head_camera/depth_registered/points");
+  private_node_.param<string>("point_cloud_topic", point_cloud_topic_, "/camera/depth/points");
   private_node_.getParam("zones_config", zones_file);
 
   // setup publishers/subscribers we need
@@ -430,10 +430,12 @@ bool Segmenter::segmentObjects(rail_manipulation_msgs::SegmentedObjectList &obje
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc(new pcl::PointCloud<pcl::PointXYZRGB>);
   ros::Time request_time = ros::Time::now();
   ros::Time point_cloud_time = request_time - ros::Duration(0.1);
+   ROS_INFO("segmentation.");
   while (point_cloud_time < request_time)
   {
-    pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr pc_msg =
-        ros::topic::waitForMessage<pcl::PointCloud<pcl::PointXYZRGB> >(point_cloud_topic_, node_,
+    //pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr pc_msg =
+      
+   sensor_msgs::PointCloud2ConstPtr pc_msg =   ros::topic::waitForMessage<sensor_msgs::PointCloud2>(point_cloud_topic_, node_,
                                                                        ros::Duration(10.0));
     if (pc_msg == NULL)
     {
@@ -442,9 +444,13 @@ bool Segmenter::segmentObjects(rail_manipulation_msgs::SegmentedObjectList &obje
     }
     else
     {
-      *pc = *pc_msg;
+      ROS_INFO("YES point cloud received for segmentation.");
+      pcl::PCLPointCloud2 pcl_pc2;
+      pcl_conversions::toPCL(*pc_msg, pcl_pc2);
+      pcl::fromPCLPointCloud2(pcl_pc2, *pc);
+
     }
-    point_cloud_time = pcl_conversions::fromPCL(pc->header.stamp);
+    point_cloud_time = pc_msg->header.stamp;
   }
 
   return executeSegmentation(pc, objects);
