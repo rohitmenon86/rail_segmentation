@@ -146,6 +146,26 @@ public:
      */
     bool okay() const;
 
+    
+    /*!
+    * \brief Callback for the main segmentation request.
+    *
+    * Performs a segmenation with the latest point cloud. This will publish both a segmented object list and a marker
+    * array of the resulting segmentation.
+    *
+    * \param objects List for resulting segmented objects.
+    */
+    bool segmentObjects(rail_manipulation_msgs::SegmentedObjectList &objects);
+
+    /*!
+     * \brief Main segmentation routine.
+     * @param pc input point cloud to be segmented
+     * @return true on success, to be passed to service return
+     */
+    bool executeSegmentation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc,
+        rail_manipulation_msgs::SegmentedObjectList &objects);
+
+
 private:
     /*!
      * \brief Determine the current zone based on the latest state of the TF tree.
@@ -221,24 +241,6 @@ private:
     * \return Returns true if the segmentation was successful.
     */
     bool segmentObjectsFromPointCloudCallback(rail_manipulation_msgs::SegmentObjectsFromPointCloud::Request &req, rail_manipulation_msgs::SegmentObjectsFromPointCloud::Response &res);
-
-    /*!
-    * \brief Callback for the main segmentation request.
-    *
-    * Performs a segmenation with the latest point cloud. This will publish both a segmented object list and a marker
-    * array of the resulting segmentation.
-    *
-    * \param objects List for resulting segmented objects.
-    */
-    bool segmentObjects(rail_manipulation_msgs::SegmentedObjectList &objects);
-
-    /*!
-     * \brief Main segmentation routine.
-     * @param pc input point cloud to be segmented
-     * @return true on success, to be passed to service return
-     */
-    bool executeSegmentation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc,
-        rail_manipulation_msgs::SegmentedObjectList &objects);
 
     /*!
      * \brief Find and remove a surface from the given point cloud.
