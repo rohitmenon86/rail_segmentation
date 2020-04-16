@@ -12,7 +12,6 @@ env:
 
 branches:
   only:
-    - develop
     - kinetic-devel
     - melodic-devel
 
