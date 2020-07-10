@@ -86,7 +86,7 @@ public:
     /*! The distance threshold for the plane segmenter. */
     static constexpr double SAC_DISTANCE_THRESHOLD = 0.01;
     /*! The maximum interations for the plane segmenter */
-    static constexpr int SAC_MAX_ITERATIONS = 100;
+    static constexpr int SAC_MAX_ITERATIONS = 200;
     /*! The padding for surface removal. */
     static constexpr double SURFACE_REMOVAL_PADDING = 0.005;
     /*! The minimum cluster size. */

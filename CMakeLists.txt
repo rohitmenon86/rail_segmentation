@@ -39,8 +39,22 @@ generate_messages()
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package()
-
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES rail_segmentation_lib
+  CATKIN_DEPENDS pcl_conversions
+  pcl_ros
+  roscpp
+  roslib
+  rail_manipulation_msgs
+  sensor_msgs
+  std_srvs
+  tf
+  tf2
+  tf2_ros
+  
+  DEPENDS ${boost_LIBRARIES} yaml-cpp
+)
 ###########
 ## Build ##
 ###########
@@ -58,6 +72,20 @@ include_directories(include
   ${YAML_CPP_INCLUDE_DIRS}
 )
 link_directories(${YAML_CPP_LIBRARY_DIRS})
+
+add_library(rail_segmentation_lib
+  src/bounding_volume_calculator.cpp
+  src/SegmentationZone.cpp
+  src/Segmenter.cpp
+)
+
+add_dependencies(rail_segmentation_lib ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(rail_segmentation_lib
+  ${boost_LIBRARIES}
+  ${catkin_LIBRARIES}
+  yaml-cpp
+)
 
 ## Declare a cpp executable
 add_executable(${PROJECT_NAME}

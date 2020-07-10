@@ -31,6 +31,8 @@ using namespace rail::segmentation;
 
 Segmenter::Segmenter() : private_node_("~"), tf2_(tf_buffer_)
 {
+  ROS_INFO("Segmenter Constructor Entered");
+
   // flag for using the provided point cloud
 
   // set defaults
@@ -45,17 +47,23 @@ Segmenter::Segmenter() : private_node_("~"), tf2_(tf_buffer_)
   private_node_.param("use_color", use_color_, false);
   private_node_.param("crop_first", crop_first_, false);
   private_node_.param("label_markers", label_markers_, false);
-  private_node_.param<string>("point_cloud_topic", point_cloud_topic_, "/camera/depth/points");
+  private_node_.param<string>("point_cloud_topic", point_cloud_topic_, "/camera/depth/color/points");
   private_node_.getParam("zones_config", zones_file);
+  
+  bool use_as_node = false;
+  private_node_.param("use_as_node", use_as_node, false);
+
 
   // setup publishers/subscribers we need
-  segment_srv_ = private_node_.advertiseService("segment", &Segmenter::segmentCallback, this);
-  segment_objects_srv_ = private_node_.advertiseService("segment_objects", &Segmenter::segmentObjectsCallback, this);
-  segment_objects_from_point_cloud_srv_ = private_node_.advertiseService("segment_objects_from_point_cloud", &Segmenter::segmentObjectsFromPointCloudCallback, this);
-  clear_srv_ = private_node_.advertiseService("clear", &Segmenter::clearCallback, this);
-  remove_object_srv_ = private_node_.advertiseService("remove_object", &Segmenter::removeObjectCallback, this);
-  calculate_features_srv_ = private_node_.advertiseService("calculate_features", &Segmenter::calculateFeaturesCallback,
-                                                           this);
+  if(use_as_node)
+  {
+    segment_srv_ = private_node_.advertiseService("segment", &Segmenter::segmentCallback, this);
+    segment_objects_srv_ = private_node_.advertiseService("segment_objects", &Segmenter::segmentObjectsCallback, this);
+    segment_objects_from_point_cloud_srv_ = private_node_.advertiseService("segment_objects_from_point_cloud", &Segmenter::segmentObjectsFromPointCloudCallback, this);
+    clear_srv_ = private_node_.advertiseService("clear", &Segmenter::clearCallback, this);
+    remove_object_srv_ = private_node_.advertiseService("remove_object", &Segmenter::removeObjectCallback, this);
+    calculate_features_srv_ = private_node_.advertiseService("calculate_features", &Segmenter::calculateFeaturesCallback, this);
+  }
   segmented_objects_pub_ = private_node_.advertise<rail_manipulation_msgs::SegmentedObjectList>(
       "segmented_objects", 1, true
   );
