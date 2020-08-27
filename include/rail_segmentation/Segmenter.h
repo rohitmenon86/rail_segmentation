@@ -165,6 +165,14 @@ public:
     bool executeSegmentation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc,
         rail_manipulation_msgs::SegmentedObjectList &objects);
 
+    void setCurrentZone(SegmentationZone &zone);
+
+    void setMinClusterSize(int size){min_cluster_size_ = size;};
+
+    void setMaxClusterSize(int size){max_cluster_size_ = size;};
+
+    void setClusterTolerance(double tolerance){cluster_tolerance_ = tolerance;};
+
 
 private:
     /*!
@@ -176,7 +184,7 @@ private:
      *
      * \return The zone that matches the current state of the TF tree.
      */
-    const SegmentationZone &getCurrentZone() const;
+    SegmentationZone &getCurrentZone();
 
     /*!
      * \brief Callback for the remove object request.

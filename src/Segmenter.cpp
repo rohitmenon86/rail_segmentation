@@ -284,7 +284,13 @@ bool Segmenter::okay() const
   return okay_;
 }
 
-const SegmentationZone &Segmenter::getCurrentZone() const
+void Segmenter::setCurrentZone(SegmentationZone &input_zone)
+{
+  SegmentationZone &currentZone = this->getCurrentZone();
+  currentZone = input_zone;
+}
+
+SegmentationZone &Segmenter::getCurrentZone()
 {
   // check each zone
   for (size_t i = 0; i < zones_.size(); i++)
@@ -793,9 +799,12 @@ bool Segmenter::executeSegmentation(pcl::PointCloud<pcl::PointXYZRGB>::Ptr pc,
         text_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
         text_marker.action = visualization_msgs::Marker::ADD;
 
-        text_marker.pose.position.x = segmented_object.center.x;
-        text_marker.pose.position.y = segmented_object.center.y;
-        text_marker.pose.position.z = segmented_object.center.z + 0.05 + segmented_object.height/2.0;
+        //text_marker.pose.position.x = segmented_object.center.x;
+        //text_marker.pose.position.y = segmented_object.center.y;
+        // text_marker.pose.position.z = segmented_object.center.z + 0.05 + segmented_object.height/2.0;
+        text_marker.pose.position.x = segmented_object.centroid.x;
+        text_marker.pose.position.y = segmented_object.centroid.y;
+        text_marker.pose.position.z = segmented_object.centroid.z - 0.05;
 
         text_marker.scale.x = .1;
         text_marker.scale.y = .1;
