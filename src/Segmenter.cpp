@@ -73,11 +73,9 @@ Segmenter::Segmenter() : private_node_("~"), tf2_(tf_buffer_)
   markers_pub_ = private_node_.advertise<visualization_msgs::MarkerArray>("markers", 1, true);
   table_marker_pub_ = private_node_.advertise<visualization_msgs::Marker>("table_marker", 1, true);
   // setup a debug publisher if we need it
-  if (debug_)
-  {
-    debug_pc_pub_ = private_node_.advertise<pcl::PointCloud<pcl::PointXYZRGB> >("debug_pc", 1, true);
-    debug_img_pub_ = private_node_.advertise<sensor_msgs::Image>("debug_img", 1, true);
-  }
+ 
+  debug_pc_pub_ = private_node_.advertise<pcl::PointCloud<pcl::PointXYZRGB> >("debug_pc", 1, true);
+  debug_img_pub_ = private_node_.advertise<sensor_msgs::Image>("debug_img", 1, true);
 
   // check the YAML version
 #ifdef YAMLCPP_GT_0_5_0

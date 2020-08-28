@@ -173,7 +173,9 @@ public:
 
     void setClusterTolerance(double tolerance){cluster_tolerance_ = tolerance;};
 
+    void setCropFirst(bool crop_first){crop_first_ = crop_first;};
 
+    void setDebug(bool debug){debug_ = debug;};
 private:
     /*!
      * \brief Determine the current zone based on the latest state of the TF tree.

@@ -2,14 +2,17 @@
 	<node name="rail_segmentation" pkg="rail_segmentation" type="rail_segmentation" output="screen">
     <!-- Rail segmentation parameters -->
     <param name="debug" value="true" />
-    <param name="point_cloud_topic" value="/camera/depth/color/points" />    
+    <param name="point_cloud_topic" value="/camera/depth/points" />    
     <param name="use_color" value="false" />
     <param name="crop_first" value="true" />
     <param name="label_markers" value="true" />
-    <param name="min_cluster_size" value="100" />
-    <param name="min_cluster_size" value="2000" />
+    <param name="cluster_tolerance" value="0.02"/>
+    <param name="min_cluster_size" value="50" />
+    <param name="max_cluster_size" value="4000" />
+    <param name="use_as_node" value="true" />
 
-
-	</node>
+    </node>
+    
+    <!-- <remap from="/camera/depth/points" to="/camera/depth/color/points"/> -->
   
 </launch>
