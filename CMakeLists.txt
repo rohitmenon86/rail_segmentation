@@ -41,7 +41,7 @@ generate_messages()
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES rail_segmentation_lib
+  LIBRARIES rail_segmentation
   CATKIN_DEPENDS pcl_conversions
   pcl_ros
   roscpp
@@ -73,22 +73,22 @@ include_directories(include
 )
 link_directories(${YAML_CPP_LIBRARY_DIRS})
 
-add_library(rail_segmentation_lib
+add_library(${PROJECT_NAME}
   src/bounding_volume_calculator.cpp
   src/SegmentationZone.cpp
   src/Segmenter.cpp
 )
 
-add_dependencies(rail_segmentation_lib ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(rail_segmentation_lib
+target_link_libraries(${PROJECT_NAME}
   ${boost_LIBRARIES}
   ${catkin_LIBRARIES}
   yaml-cpp
 )
 
 ## Declare a cpp executable
-add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME}_node
   nodes/${PROJECT_NAME}.cpp
   src/bounding_volume_calculator.cpp
   src/SegmentationZone.cpp
@@ -97,13 +97,13 @@ add_executable(${PROJECT_NAME}
 add_executable(continuous_segmenter nodes/continuous_segmenter.cpp)
 
 ## Add message build dependencies (needed for source build)
-add_dependencies(${PROJECT_NAME}
+add_dependencies(${PROJECT_NAME}_node
   ${PROJECT_NAME}_generate_messages_cpp
   rail_manipulation_msgs_generate_messages_cpp
 )
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}_node
   ${boost_LIBRARIES}
   ${catkin_LIBRARIES}
   yaml-cpp
